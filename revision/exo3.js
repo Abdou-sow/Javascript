@@ -1,16 +1,22 @@
 function checkPal(str){
+    var b=1
     for(var i=0 ,j=str.length -1; i<j;i++,j--){
-        console.log("mon i"+str[i])
-        console.log("mon j"+str[j])
-        if(str[i] !== str[j]){
-            return false
+        // console.log("mon i"+str[i])
+        // console.log("mon j"+str[j])
+        if(str[i] == str[j]){
+            b=b*1
         }
         else{
-            continue
+            b=b*0
         }
-        return true
     }
-    //return false 
-
+    return b  
 }
-console.log(checkPal("papa"))
+var x =checkPal("potiop")
+
+if(x == 1){
+    console.log("Palindrome !")
+}
+else{
+    console.log("Nope")
+}
