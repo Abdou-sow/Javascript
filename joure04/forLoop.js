@@ -26,5 +26,8 @@ for(var i=0; i<=20; i++){
 
     }
 }
-console.log("les plus de 5 sont au nombre de :" + plus)
+//console.log("les plus de 5 sont au nombre de :" + plus)
+
+
+
 
