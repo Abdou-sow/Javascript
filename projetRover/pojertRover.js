@@ -1,7 +1,7 @@
 var prompt = require("prompt")
 
 var grid = [
-    [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["N", " ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
@@ -18,55 +18,58 @@ const rover = {
     direction: "N",
     x: 0,
     y: 0,
-    travelLog:[]
+    travelLog: []
 }
 //fonction erreur 
-function ere(){
-    return "erreur"
+function ere() {
+    console.log("erreur");
 }
 
 
 // funtion turnLeft
-function turnLeft(rover) {
-    if (rover.direction === "N") {
-        rover.direction = "E"
-        return rover;
-    } else if (rover.direction === "E") {
-        rover.direction = "S"
-        return rover;
-    } else if (rover.direction === "S") {
-        rover.direction = "W"
-        return rover;
-    } else if (rover.direction === "W") {
-        rover.direction = "N"
-        return rover;
+function turnLeft(rover1) {
+    if (rover1.direction === "N") {
+        rover1.direction = "W"
+        return rover1;
+    } else if (rover1.direction === "W") {
+        rover1.direction = "S"
+        return rover1;
+    } else if (rover1.direction === "S") {
+        rover1.direction = "E"
+        return rover1;
+    } else if (rover1.direction === "E") {
+        rover1.direction = "N"
+        return rover1;
     } else {
         return;
     }
 
+    grid[rover1.y][rover1.x] = rover1.direction
 }
 
 
 
 // function tornRight
-function turnRight(rover) {
+function turnRight(rover1) {
 
-    if (rover.direction === "N") {
-        rover.direction = "W"
-        return rover;
-    } else if (rover.direction === "W") {
-        rover.direction = "S"
-        return rover;
+    if (rover1.direction === "N") {
+        rover1.direction = "E"
+        return rover1;
+    } else if (rover1.direction === "E") {
+        rover1.direction = "S"
+        return rover1;
 
-    } else if (rover.direction === "S") {
-        rover.direction = "E"
-        return rover;
-    } else if (rover.direction === "E") {
-        rover.direction = "N"
-        return rover;
+    } else if (rover1.direction === "S") {
+        rover1.direction = "W"
+        return rover1;
+    } else if (rover1.direction === "W") {
+        rover1.direction = "N"
+        return rover1;
     } else {
         return;
     }
+
+    grid[rover1.y][rover1.x] = rover1.direction
 
 }
 // console.log(turnRight(rover));
@@ -74,26 +77,46 @@ function turnRight(rover) {
 
 // movement du rover
 
-function moveForward(rover) {
+function moveForward(rover1) {
 
-    if (rover.direction === "E") {
-        rover.x += 1;
-        return rover;
+    if (rover1.direction === "E") {
+        if (rover1.x == 9) {
+            return ere
+
+        } else {
+            rover1.x += 1;
+            return rover1;
+        }
     }
-    else if (rover.direction === "W") {
-        rover.x -= 1;
-        return rover;
+    else if (rover1.direction === "W") {
+        if (rover1.x == 0) {
+            return ere
+
+        } else {
+            rover1.x -= 1;
+            return rover1;
+        }
     }
-    else if (rover.direction === "S") {
-        rover.y += 1;
-        return rover;
+    else if (rover1.direction === "S") {
+        if (rover1.y == 9) {
+            return ere
+
+        } else {
+            rover1.y += 1;
+            return rover1;
+        }
     }
-    else if (rover.direction === "N") {
-        rover.y -= 1;
-        return rover;
-    } else {
-        return;
+    else if (rover1.direction === "N") {
+        if (rover1.y == 0) {
+            return ere
+        } else {
+            rover1.y -= 1;
+            return rover1;
+        }
     }
+    var lastposition= travelLog[travelLog.length -1]
+    grid[lastposition.y][lastposition.x]= " "
+    grid[rover1.y][rover1.x] = rover1.direction
 
 }
 
@@ -103,25 +126,48 @@ function pilotRover(str) {
     for (var i = 0; i < str.length; i++) {
         if (str[i] === "l") {
             turnLeft(rover);
-            rover.travelLog.push([rover.x ,rover.y])
+            // rover.travelLog.push([rover.x ,rover.y])
         }
         else if (str[i] === "r") {
             turnRight(rover);
-            rover.travelLog.push([rover.x ,rover.y])
+            // rover.travelLog.push([rover.x ,rover.y])
 
         }
         else if (str[i] === "f") {
+
+            rover.travelLog.push([rover.x, rover.y])
             moveForward(rover)
-            rover.travelLog.push([rover.x ,rover.y])
 
         }
         else {
-               return  "erreur"  
+            return "erreur"
+        }
+
+    }
+}
+
+
+// pilotRover("rfffrffflllfff")
+// console.log(rover)
+
+
+function instruction() {
+    prompt.get(
+        ["instruction"],
+
+        function (err, res) {
+            if (err) {
+                return "erreur"
             }
 
+            pilotRover(res.instruction)
+            console.log(rover.travelLog);
+            instruction()
+
         }
-    }
+    )
+
+}
 
 
-pilotRover("lrfflf")
-console.log(rover)
+instruction()
